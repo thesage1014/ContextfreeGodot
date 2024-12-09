@@ -1,0 +1,304 @@
+[gd_scene load_steps=15 format=3 uid="uid://b7l8ewyqs7eb0"]
+
+[ext_resource type="Script" path="res://scenes/SeaCritters.gd" id="1_4ykxu"]
+[ext_resource type="PackedScene" uid="uid://oodcnjvspaj1" path="res://scenes/Starfish.tscn" id="1_vd2di"]
+[ext_resource type="Texture2D" uid="uid://bo7ltlnteakfj" path="res://graphics/reef.jpg" id="2_e64l6"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_cej5t"]
+panorama = ExtResource("2_e64l6")
+
+[sub_resource type="Sky" id="Sky_4hssc"]
+sky_material = SubResource("PanoramaSkyMaterial_cej5t")
+
+[sub_resource type="Environment" id="Environment_72o1c"]
+background_mode = 2
+sky = SubResource("Sky_4hssc")
+sky_rotation = Vector3(0, 3.14159, 0)
+tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.71
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.1291
+volumetric_fog_albedo = Color(0.48, 1, 0.896, 1)
+volumetric_fog_sky_affect = 0.195
+
+[sub_resource type="Gradient" id="Gradient_gmiha"]
+offsets = PackedFloat32Array(0, 0.674603, 1)
+colors = PackedColorArray(0.2842, 0.58, 0.47647, 1, 0.3927, 0.51, 0.468945, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7vide"]
+gradient = SubResource("Gradient_gmiha")
+fill = 1
+fill_from = Vector2(0.494737, 0.505263)
+fill_to = Vector2(0.510526, 0.0421053)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tkwim"]
+blend_mode = 1
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_7vide")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gh8eg"]
+material = SubResource("StandardMaterial3D_tkwim")
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_4qiyp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j15dd"]
+size = Vector3(10, 10, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_78ai0"]
+size = Vector3(10, 10, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3snnt"]
+size = Vector3(10, 10, 10)
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "sliders")]
+script = ExtResource("1_4ykxu")
+previewFish = NodePath("WorldEnvironment/Camera3D/PreviewStarfish")
+sliders = [NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_72o1c")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0.360378, -0.887162, -0.288222, 0.346594, -0.159513, 0.924353, 0, 0, -11.7133)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.903448, 0.428699, 0, -0.428699, 0.903448, 0, 3.464, 3.85013)
+
+[node name="PreviewStarfish" parent="WorldEnvironment/Camera3D" instance=ExtResource("1_vd2di")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23, -0.485, -1.385)
+sleeping = true
+freeze = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldEnvironment/Camera3D/PreviewStarfish"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+mesh = SubResource("QuadMesh_gh8eg")
+
+[node name="Floor" type="StaticBody3D" parent="WorldEnvironment"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/Floor"]
+shape = SubResource("WorldBoundaryShape3D_4qiyp")
+
+[node name="front" type="StaticBody3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.75956)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/front"]
+shape = SubResource("WorldBoundaryShape3D_4qiyp")
+
+[node name="back" type="StaticBody3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, 0, -3.06947)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/back"]
+shape = SubResource("WorldBoundaryShape3D_4qiyp")
+
+[node name="left" type="StaticBody3D" parent="WorldEnvironment"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -4, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/left"]
+shape = SubResource("WorldBoundaryShape3D_4qiyp")
+
+[node name="right" type="StaticBody3D" parent="WorldEnvironment"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/right"]
+shape = SubResource("WorldBoundaryShape3D_4qiyp")
+
+[node name="push front" type="Area3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+priority = 3
+gravity_space_override = 1
+gravity_point_center = Vector3(1, 0, 0)
+gravity_direction = Vector3(1, 0, 0)
+gravity = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push front"]
+shape = SubResource("BoxShape3D_j15dd")
+
+[node name="push back" type="Area3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+priority = 2
+gravity_space_override = 1
+gravity_point_center = Vector3(-1, 0, 0)
+gravity_direction = Vector3(-1, 0, 0)
+gravity = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push back"]
+shape = SubResource("BoxShape3D_78ai0")
+
+[node name="pull center" type="Area3D" parent="WorldEnvironment"]
+priority = 1
+gravity_space_override = 1
+gravity_point = true
+gravity_point_center = Vector3(0, 1, 0)
+gravity_direction = Vector3(0, 1, 0)
+gravity = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/pull center"]
+shape = SubResource("BoxShape3D_3snnt")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88707, 0)
+light_color = Color(0.888, 1, 0.68, 1)
+light_energy = 4.071
+omni_range = 11.951
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Show" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+offset_right = 242.0
+offset_bottom = 419.0
+
+[node name="Control" type="Control" parent="Control/Show"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="Control/Show"]
+layout_mode = 2
+size_flags_vertical = 0
+current_tab = 0
+
+[node name="Show" type="PanelContainer" parent="Control/Show/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="GridContainer" parent="Control/Show/TabContainer/Show"]
+layout_mode = 2
+columns = 3
+
+[node name="Control2" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Show/TabContainer/Show/MarginContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GenerateButton" type="Button" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Spawn"
+
+[node name="RandomizeButton" type="Button" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Randomize"
+
+[node name="offs label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Offset"
+
+[node name="offs" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 40.0
+step = 0.0
+value = 15.0
+
+[node name="stroke label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Stroke
+"
+
+[node name="stroke" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.0
+value = 1.0
+
+[node name="wobble label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Wobble"
+
+[node name="osc2" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 0.3
+step = 0.0
+value = 0.15
+
+[node name="hue label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Hue
+"
+
+[node name="hu" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 360.0
+step = 0.0
+
+[node name="Rainbow label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Rainbow
+"
+
+[node name="huc" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 0.01
+max_value = 2.0
+step = 0.0
+value = 0.1
+exp_edit = true
+
+[node name="dark label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dark"
+
+[node name="dark" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+
+[node name="legs label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Legs"
+
+[node name="nil" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 12.0
+value = 5.0
+
+[node name="Control2" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Hide" type="Control" parent="Control/Show/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+metadata/_tab_index = 1
+
+[connection signal="pressed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer/RandomizeButton" to="." method="_on_randomize_button_pressed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_value_changed"]

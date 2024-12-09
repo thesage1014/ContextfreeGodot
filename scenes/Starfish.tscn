@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3 uid="uid://oodcnjvspaj1"]
+
+[ext_resource type="Script" path="res://scenes/starfish.gd" id="1_qbdxb"]
+[ext_resource type="Texture2D" uid="uid://hpqxebs2hnjh" path="res://gen/starfish3.png" id="2_sglay"]
+[ext_resource type="Texture2D" uid="uid://dnanfhcgclwpt" path="res://graphics/defaultStarf.png" id="3_cvr6m"]
+[ext_resource type="PackedScene" uid="uid://cit01y8g4jxsm" path="res://graphics/starfish.blend" id="3_vunuf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6oagt"]
+resource_local_to_scene = true
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("3_cvr6m")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2gdod"]
+radius = 0.320977
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_layxr"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("2_sglay")
+
+[sub_resource type="QuadMesh" id="QuadMesh_7kbu5"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_layxr")
+
+[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "starAnim", "starMesh")]
+script = ExtResource("1_qbdxb")
+bonusMesh = NodePath("BonusMesh")
+modelScene = NodePath("starfish2")
+starAnim = NodePath("starfish2/AnimationPlayer")
+starMesh = NodePath("starfish2/Skeleton3D/starfish")
+
+[node name="starfish2" parent="." instance=ExtResource("3_vunuf")]
+transform = Transform3D(0.193539, 0, 0, 0, 3.72529e-09, -0.193539, 0, 0.193539, 3.72529e-09, 0, 0, 0)
+
+[node name="Skeleton3D" parent="starfish2" index="0"]
+bones/2/rotation = Quaternion(-0.416763, 6.7946e-05, 0.571234, 0.707107)
+bones/3/rotation = Quaternion(0.417004, -0.000307379, 0.571058, 0.707107)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.0183976, 0.0183979, -0.706867, 0.706867)
+bones/5/rotation = Quaternion(0.672609, 9.34276e-05, -0.218226, 0.707089)
+bones/6/rotation = Quaternion(-0.672083, -0.000267392, -0.219783, 0.707107)
+
+[node name="starfish" parent="starfish2/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_6oagt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_2gdod")
+
+[node name="BonusMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+visible = false
+mesh = SubResource("QuadMesh_7kbu5")
+
+[node name="Mesh2" type="MeshInstance3D" parent="BonusMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.02)
+mesh = SubResource("QuadMesh_7kbu5")
+skeleton = NodePath("../..")
+
+[editable path="starfish2"]

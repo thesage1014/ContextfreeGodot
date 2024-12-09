@@ -1,0 +1,33 @@
+CF::Impure = 1
+CF::Background = [a -1]
+startshape start
+offs = 15
+stroke = 1.5
+osc2 = .03
+hu = 90
+huc = .05
+dark = 0
+legs = 50
+shape start {
+    
+    spiro(7200,(legs/2))[h hu]
+    //spiro(7200,1.5)[s .55 x -5.]
+}
+
+shape spiro(number life, number cycles) {
+    transform[s max(.1,((.1+osc2)*abs(sin(life)))) r (life*.1*cycles)sat .8 b .9] {// sat .8 b .9
+        CIRCLE[s 60 (stroke*5) x -offs z -100 sat -.9 b -dark]
+        CIRCLE[s stroke (stroke*2) x -(offs*4)]
+        CIRCLE[s stroke (stroke*2) x -(offs*3)]
+        CIRCLE[s stroke (stroke*2) x -(offs*2)]
+        CIRCLE[s stroke 2 x -offs]
+        CIRCLE[s stroke (stroke*2) ]
+        CIRCLE[s stroke (stroke*2) x offs]
+        CIRCLE[s stroke (stroke*2) x (offs*2)]
+        CIRCLE[s (stroke*.75) (stroke*2) x (offs*3)]
+        CIRCLE[s (stroke*.75) (stroke*2) x (offs*4)]
+    }
+    if(life > 0) {
+        spiro(life-1,cycles)[y .02 r .10001 h huc]
+    }
+}
