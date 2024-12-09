@@ -15,6 +15,10 @@ background_mode = 2
 sky = SubResource("Sky_4hssc")
 sky_rotation = Vector3(0, 3.14159, 0)
 tonemap_mode = 2
+ssao_enabled = true
+ssao_intensity = 16.0
+ssao_power = 41.7863
+ssao_horizon = 0.12
 glow_enabled = true
 glow_bloom = 0.71
 volumetric_fog_enabled = true
@@ -35,6 +39,8 @@ fill_to = Vector2(0.510526, 0.0421053)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tkwim"]
 blend_mode = 1
 shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
 albedo_texture = SubResource("GradientTexture2D_7vide")
 
 [sub_resource type="QuadMesh" id="QuadMesh_gh8eg"]
@@ -61,7 +67,12 @@ environment = SubResource("Environment_72o1c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0.360378, -0.887162, -0.288222, 0.346594, -0.159513, 0.924353, 0, 0, -11.7133)
-shadow_enabled = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88707, 0)
+light_color = Color(0.888, 1, 0.68, 1)
+light_energy = 4.071
+omni_range = 11.951
 
 [node name="Camera3D" type="Camera3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 0.903448, 0.428699, 0, -0.428699, 0.903448, 0, 3.464, 3.85013)
@@ -136,12 +147,6 @@ gravity = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/pull center"]
 shape = SubResource("BoxShape3D_3snnt")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88707, 0)
-light_color = Color(0.888, 1, 0.68, 1)
-light_energy = 4.071
-omni_range = 11.951
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

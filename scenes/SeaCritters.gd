@@ -20,6 +20,8 @@ var params:Dictionary = {
 }
 func _ready() -> void:
 	_update_preview()
+	previewFish.starAnim.play("Wave2")
+	
 
 func _process(delta: float) -> void:
 	previewFish.rotate_z(delta*.15)
@@ -45,7 +47,10 @@ func _on_slider_drag_ended(value_changed: bool) -> void:
 
 func _on_randomize_button_pressed() -> void:
 	for slider in sliders:
-		slider.value = randf_range(slider.min_value, slider.max_value)
+		if slider.exp_edit:
+			slider.value = slider.min_value + abs(randfn(0, (slider.max_value-slider.min_value)/60))
+		else:
+			slider.value = randf_range(slider.min_value, slider.max_value)
 	_update_preview()
 
 

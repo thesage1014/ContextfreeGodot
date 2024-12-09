@@ -1,15 +1,15 @@
 CF::Impure = 1
-CF::Background = [a -1]
 startshape start
-offs = 15
+offs = 35
 stroke = 1.5
 osc2 = .03
 hu = 90
 huc = .05
 dark = 0
-legs = 50
+legs = 5
+CF::Background = [sat .7 b -.2 h hu a -.6]
 shape start {
-    
+    //CIRCLE[s 55 x -11.5 z -2000000 ]
     spiro(7200,(legs/2))[h hu]
     //spiro(7200,1.5)[s .55 x -5.]
 }

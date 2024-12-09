@@ -10,6 +10,7 @@ var filename = str(randi()) + ".png"
 var thread:Thread
 var queuedParams:Dictionary
 var lastParams:Dictionary
+var buddy:Starfish
 #offs = 15
 #stroke = 1.5
 #osc2 = .03
@@ -17,16 +18,16 @@ var lastParams:Dictionary
 #huc = .05
 #dark = 0
 func _ready() -> void:
-	starAnim.play("Wave")
+	starAnim.play("Swim")
 
 func _process(delta: float) -> void:
 	if generating:
 		bonusMesh.scale = Vector3(.3,.3,1)
 		bonusMesh.rotate_z(4)
 	else:
-		bonusMesh.scale = Vector3.ONE
-		bonusMesh.rotation.z = 0
 		if queuedParams:
+			print(queuedParams)
+			print(lastParams)
 			if queuedParams != lastParams:
 				var qptemp = queuedParams
 				generate(qptemp)
@@ -41,17 +42,20 @@ func _process(delta: float) -> void:
 		fileReady = false
 		thread.wait_to_finish()
 		thread = null
+		bonusMesh.visible = false
 
 func _physics_process(_delta: float) -> void:
 	apply_central_force(Vector3(randf()-.5,randf()-.5,randf()-.5))
 
+
+
 func generate(params:Dictionary):
 	generating = true
-	
-	
+	bonusMesh.visible = true
 	if !thread:
 		thread = Thread.new()
-		lastParams = params
+		lastParams.clear()
+		lastParams.merge(params)
 		thread.start(loadFile.bind(params))
 	else:
 		queuedParams = params
@@ -73,3 +77,21 @@ func loadFile(params:Dictionary):
 func _exit_tree():
 	if thread:
 		thread.wait_to_finish()
+
+
+func _on_body_entered(body: Node) -> void:
+	if !buddy and body is Starfish:
+		var possibleBuddy = body as Starfish
+		if !possibleBuddy.buddy:
+			print(possibleBuddy)
+			buddy = possibleBuddy
+			buddy.buddy = self
+			var joint = ConeTwistJoint3D.new()
+			add_child(joint)
+			joint.node_a = self.get_path()
+			joint.node_b = buddy.get_path()
+			joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
+			joint.set_param(ConeTwistJoint3D.PARAM_TWIST_SPAN,0)
+			joint.set_param(ConeTwistJoint3D.PARAM_SOFTNESS,0)
+			joint.set_param(ConeTwistJoint3D.PARAM_BIAS,0)
+			
