@@ -1,0 +1,118 @@
+//CF::Size = [s 10]
+CF::Impure = 1
+startshape start
+offs = 35
+stroke = 1.5
+osc2 = .03
+hu = 90
+huc = .05
+dark = 0
+legs = 5
+tab =1 
+randness = 0
+CF::Background = [sat .7 b -.2 h hu a -.6]
+shape start {
+    if (tab == 0) {
+        spiro(7200,(legs/2))[s .175 x 1.6 h hu ]
+    }
+    if (tab == 1) {
+        
+        
+        octopus[s .5 y 1.5 r 20 h hu sat (.5-dark) b (.7-dark)]
+    }
+}
+
+shape spiro(number life, number cycles) {
+    transform[s max(.1,((.1+osc2)*abs(sin(life)))) r (life*.1*cycles)sat .8 b .9] {// sat .8 b .9
+        CIRCLE[s 60 (stroke*5) x -offs z -100 sat -.9 b -dark]
+        CIRCLE[s stroke (stroke*2) x -(offs*4)]
+        CIRCLE[s stroke (stroke*2) x -(offs*3)]
+        CIRCLE[s stroke (stroke*2) x -(offs*2)]
+        CIRCLE[s stroke 2 x -offs]
+        CIRCLE[s stroke (stroke*2) ]
+        CIRCLE[s stroke (stroke*2) x offs]
+        CIRCLE[s stroke (stroke*2) x (offs*2)]
+        CIRCLE[s (stroke*.75) (stroke*2) x (offs*3)]
+        CIRCLE[s (stroke*.75) (stroke*2) x (offs*4)]
+    }
+    if(life > 0) {
+        spiro(life-1,cycles)[y .02 r .10001 h huc]
+    }
+}
+
+
+// OCTOPUS ------------------------------------
+bright = .3
+satu = .5
+
+
+shape octopus{
+    eye[s .8 z 20 r -10]
+    eye[s .6 .7 x -1.5 y .8 z 20 r -30]
+    splay = -6
+    if(randness){ splay = 0 }
+        
+    loop 8 [r -20 z .1 h (huc*50)] {
+        underleg(0, rand(1,4.5))[y splay r 40]
+    }
+    loop 6 [x .3 s 1.05 r -5]{
+        CIRCLE[s 3.3 2.5 z 10 b bright sat satu]
+        gradient[x -1 y -3 s 5 z 100]
+        gradient[x -2 y -1 s 2 z 100]
+    }
+}
+
+shape eye{
+    CIRCLE[b 1]
+    SQUARE[s .6 .15 b bright sat satu]
+    loop 3 [s .6 .8] {
+        CIRCLE[s .3 x -.25 b bright sat satu]
+        CIRCLE[s .3 x .25 b bright sat satu]
+        
+    }
+    loop 8 [s 1.05 x .1 y -.02] {
+        CIRCLE[s 1.5 z -1 b bright sat satu]
+        
+    }
+    
+}
+
+
+shape underleg(number age, number curl){
+    CIRCLE[ s 1.5 1 b bright sat satu]
+    
+    if(age < 600) {
+        c2 = 0
+        if(randness){
+            c2 = rand(curl, -curl/2)
+        }
+        underleg(age+1,curl + rand(-.3,.28))[y -.1 s .99 r c2 h (huc*2)]
+    }
+    if(mod(age,14) == 0) {
+        sucker[s .5 x .8]
+    }
+    if(mod(age+7,14) == 0) {
+        sucker[s .7 x .2]
+    }
+}
+
+shape sucker{
+    gradient[s 10]
+    loop 3 [x -.1 s 1.1]{
+        CIRCLE[b (bright*1.1) sat satu]
+    }
+    CIRCLE[s .8 b 1 z .0001 ]
+}
+
+shape backSucker{
+    gradient[s 10]
+    loop 3 [x -.1 s 1.1]{
+        CIRCLE[b (bright*1.1) sat satu]
+    }
+}
+
+shape gradient{
+    loop 0 [s .7] {
+        CIRCLE[a -.994 sat .5 hue 200]
+    }
+}

@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7l8ewyqs7eb0"]
+[gd_scene load_steps=16 format=3 uid="uid://b7l8ewyqs7eb0"]
 
 [ext_resource type="Script" path="res://scenes/SeaCritters.gd" id="1_4ykxu"]
 [ext_resource type="PackedScene" uid="uid://oodcnjvspaj1" path="res://scenes/Starfish.tscn" id="1_vd2di"]
 [ext_resource type="Texture2D" uid="uid://bo7ltlnteakfj" path="res://graphics/reef.jpg" id="2_e64l6"]
+[ext_resource type="PackedScene" uid="uid://dwqio37dmwpcc" path="res://scenes/Octo.tscn" id="4_e40gs"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_cej5t"]
 panorama = ExtResource("2_e64l6")
@@ -57,10 +58,10 @@ size = Vector3(10, 10, 4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3snnt"]
 size = Vector3(10, 10, 10)
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "sliders")]
+[node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "tabs")]
 script = ExtResource("1_4ykxu")
-previewFish = NodePath("WorldEnvironment/Camera3D/PreviewStarfish")
-sliders = [NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark"), NodePath("Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil")]
+previewFish = [NodePath("WorldEnvironment/Camera3D/PreviewStarfish"), NodePath("WorldEnvironment/Camera3D/Octo")]
+tabs = NodePath("Control/UI/TabContainer")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_72o1c")
@@ -85,6 +86,12 @@ freeze = true
 [node name="MeshInstance3D" type="MeshInstance3D" parent="WorldEnvironment/Camera3D/PreviewStarfish"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 mesh = SubResource("QuadMesh_gh8eg")
+
+[node name="Octo" parent="WorldEnvironment/Camera3D" instance=ExtResource("4_e40gs")]
+transform = Transform3D(1, 0, 0, 0, 0.903447, -0.428699, 0, 0.428699, 0.903447, 1.08989, -0.485, -1.385)
+visible = false
+sleeping = true
+freeze = true
 
 [node name="Floor" type="StaticBody3D" parent="WorldEnvironment"]
 
@@ -121,7 +128,7 @@ priority = 3
 gravity_space_override = 1
 gravity_point_center = Vector3(1, 0, 0)
 gravity_direction = Vector3(1, 0, 0)
-gravity = 1.0
+gravity = 0.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push front"]
 shape = SubResource("BoxShape3D_j15dd")
@@ -132,7 +139,7 @@ priority = 2
 gravity_space_override = 1
 gravity_point_center = Vector3(-1, 0, 0)
 gravity_direction = Vector3(-1, 0, 0)
-gravity = 1.0
+gravity = 0.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push back"]
 shape = SubResource("BoxShape3D_78ai0")
@@ -159,98 +166,100 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="Show" type="HBoxContainer" parent="Control"]
+[node name="UI" type="HBoxContainer" parent="Control"]
 layout_mode = 1
 offset_right = 242.0
 offset_bottom = 419.0
 
-[node name="Control" type="Control" parent="Control/Show"]
+[node name="Control" type="Control" parent="Control/UI"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
-[node name="TabContainer" type="TabContainer" parent="Control/Show"]
+[node name="TabContainer" type="TabContainer" parent="Control/UI"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_vertical = 0
 current_tab = 0
 
-[node name="Show" type="PanelContainer" parent="Control/Show/TabContainer"]
+[node name="Starfish" type="PanelContainer" parent="Control/UI/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="MarginContainer" type="GridContainer" parent="Control/Show/TabContainer/Show"]
+[node name="MarginContainer" type="GridContainer" parent="Control/UI/TabContainer/Starfish"]
 layout_mode = 2
 columns = 3
 
-[node name="Control2" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer"]
+[node name="Control2" type="Control" parent="Control/UI/TabContainer/Starfish/MarginContainer"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Show/TabContainer/Show/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/UI/TabContainer/Starfish/MarginContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Control" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GenerateButton" type="Button" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="GenerateButton" type="Button" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Spawn"
 
-[node name="RandomizeButton" type="Button" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="RandomizeButton" type="Button" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Randomize"
 
-[node name="offs label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="offs label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Offset"
 
-[node name="offs" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="offs" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 max_value = 40.0
 step = 0.0
 value = 15.0
 
-[node name="stroke label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="stroke label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Stroke
 "
 
-[node name="stroke" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="stroke" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 max_value = 10.0
 step = 0.0
 value = 1.0
 
-[node name="wobble label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="wobble label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Wobble"
 
-[node name="osc2" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="osc2" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 max_value = 0.3
 step = 0.0
 value = 0.15
 
-[node name="hue label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="hue label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Hue
 "
 
-[node name="hu" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="hu" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 max_value = 360.0
 step = 0.0
 
-[node name="Rainbow label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="Rainbow label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Rainbow
 "
 
-[node name="huc" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="huc" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 min_value = 0.01
 max_value = 2.0
@@ -258,52 +267,183 @@ step = 0.0
 value = 0.1
 exp_edit = true
 
-[node name="dark label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="dark label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Dark"
 
-[node name="dark" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="dark" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.0
 
-[node name="legs label" type="Label" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="legs label" type="Label" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Legs"
 
-[node name="nil" type="HSlider" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="nil" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 min_value = 1.0
 max_value = 12.0
 value = 5.0
 
-[node name="Control2" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer"]
+[node name="Control2" type="Control" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 
-[node name="Control" type="Control" parent="Control/Show/TabContainer/Show/MarginContainer"]
+[node name="Control" type="Control" parent="Control/UI/TabContainer/Starfish/MarginContainer"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
-[node name="Hide" type="Control" parent="Control/Show/TabContainer"]
+[node name="Octo" type="PanelContainer" parent="Control/UI/TabContainer"]
 visible = false
-custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 metadata/_tab_index = 1
 
-[connection signal="pressed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
-[connection signal="pressed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/HBoxContainer/RandomizeButton" to="." method="_on_randomize_button_pressed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/Show/TabContainer/Show/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_value_changed"]
+[node name="MarginContainer" type="GridContainer" parent="Control/UI/TabContainer/Octo"]
+layout_mode = 2
+columns = 3
+
+[node name="Control2" type="Control" parent="Control/UI/TabContainer/Octo/MarginContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/UI/TabContainer/Octo/MarginContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GenerateButton" type="Button" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Spawn"
+
+[node name="RandomizeButton" type="Button" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Randomize"
+
+[node name="offs label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Offset"
+
+[node name="offs" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 40.0
+step = 0.0
+value = 15.0
+
+[node name="stroke label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Stroke
+"
+
+[node name="stroke" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.0
+value = 1.0
+
+[node name="wobble label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Wobble"
+
+[node name="osc2" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 0.3
+step = 0.0
+value = 0.15
+
+[node name="hue label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Hue
+"
+
+[node name="hu" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 360.0
+step = 0.0
+
+[node name="Rainbow label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Rainbow
+"
+
+[node name="huc" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 0.01
+max_value = 2.0
+step = 0.0
+value = 0.1
+exp_edit = true
+
+[node name="dark label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dark"
+
+[node name="dark" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+
+[node name="legs label" type="Label" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Legs"
+
+[node name="nil" type="HSlider" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 12.0
+value = 5.0
+
+[node name="Control2" type="Control" parent="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Control/UI/TabContainer/Octo/MarginContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Hide" type="Control" parent="Control/UI/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+metadata/_tab_index = 2
+
+[connection signal="tab_changed" from="Control/UI/TabContainer" to="." method="_on_tab_container_tab_changed"]
+[connection signal="pressed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/HBoxContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/HBoxContainer/RandomizeButton" to="." method="_on_randomize_button_pressed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_value_changed"]
+[connection signal="pressed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer/RandomizeButton" to="." method="_on_randomize_button_pressed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/stroke" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/osc2" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/hu" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_value_changed"]

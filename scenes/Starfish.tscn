@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://oodcnjvspaj1"]
 
-[ext_resource type="Script" path="res://scenes/starfish.gd" id="1_qbdxb"]
-[ext_resource type="Texture2D" uid="uid://hpqxebs2hnjh" path="res://gen/starfish3.png" id="2_sglay"]
+[ext_resource type="Script" path="res://scenes/Critter.gd" id="1_qbdxb"]
 [ext_resource type="Material" uid="uid://dy3jasmwau8ys" path="res://graphics/StarfishMat.tres" id="3_36jsh"]
 [ext_resource type="PackedScene" uid="uid://cit01y8g4jxsm" path="res://graphics/starfish.blend" id="3_vunuf"]
+[ext_resource type="Texture2D" uid="uid://dnanfhcgclwpt" path="res://graphics/defaultStarf.png" id="4_bxo4p"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_2gdod"]
 radius = 0.320977
@@ -12,20 +12,20 @@ radius = 0.320977
 resource_local_to_scene = true
 transparency = 1
 cull_mode = 2
-albedo_texture = ExtResource("2_sglay")
+albedo_texture = ExtResource("4_bxo4p")
 
 [sub_resource type="QuadMesh" id="QuadMesh_7kbu5"]
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_layxr")
 
-[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "starAnim", "starMesh")]
+[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh")]
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_qbdxb")
 bonusMesh = NodePath("BonusMesh")
 modelScene = NodePath("starfish2")
-starAnim = NodePath("starfish2/AnimationPlayer")
-starMesh = NodePath("starfish2/Skeleton3D/starfish")
+meshAnim = NodePath("starfish2/AnimationPlayer")
+meshMesh = NodePath("starfish2/Skeleton3D/starfish")
 
 [node name="starfish2" parent="." instance=ExtResource("3_vunuf")]
 transform = Transform3D(0.194, 0, 0, 0, -8.48001e-09, -0.194, 0, 0.194, -8.48001e-09, -0.0490272, 0, 0)

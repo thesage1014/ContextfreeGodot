@@ -1,16 +1,16 @@
-class_name Starfish extends RigidBody3D
+class_name Critter extends RigidBody3D
 @export var bonusMesh:MeshInstance3D
 @export var modelScene:Node3D
-@export var starAnim:AnimationPlayer
-@export var starMesh:MeshInstance3D
-
+@export var meshAnim:AnimationPlayer
+@export var meshMesh:MeshInstance3D
+var blockGeneration = false
 var generating = false
 var fileReady = false
 var filename = str(randi()) + ".png"
 var thread:Thread
 var queuedParams:Dictionary
 var lastParams:Dictionary
-var buddy:Starfish
+var buddy:Critter
 #offs = 15
 #stroke = 1.5
 #osc2 = .03
@@ -18,7 +18,7 @@ var buddy:Starfish
 #huc = .05
 #dark = 0
 func _ready() -> void:
-	starAnim.play("Swim")
+	meshAnim.play("Swim")
 
 func _process(delta: float) -> void:
 	if generating:
@@ -26,8 +26,6 @@ func _process(delta: float) -> void:
 		bonusMesh.rotate_z(4)
 	else:
 		if queuedParams:
-			print(queuedParams)
-			print(lastParams)
 			if queuedParams != lastParams:
 				var qptemp = queuedParams
 				generate(qptemp)
@@ -36,7 +34,7 @@ func _process(delta: float) -> void:
 	if fileReady:
 		var image:Image = Image.load_from_file("./gen/" + filename)
 		var imageTexture = ImageTexture.create_from_image(image)
-		var mat = starMesh.get_active_material(0) as StandardMaterial3D
+		var mat = meshMesh.get_active_material(0) as StandardMaterial3D
 		mat.albedo_texture = imageTexture
 		generating = false
 		fileReady = false
@@ -47,18 +45,17 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	apply_central_force(Vector3(randf()-.5,randf()-.5,randf()-.5))
 
-
-
 func generate(params:Dictionary):
-	generating = true
-	bonusMesh.visible = true
-	if !thread:
-		thread = Thread.new()
-		lastParams.clear()
-		lastParams.merge(params)
-		thread.start(loadFile.bind(params))
-	else:
-		queuedParams = params
+	if !blockGeneration:
+		generating = true
+		bonusMesh.visible = true
+		if !thread:
+			thread = Thread.new()
+			lastParams.clear()
+			lastParams.merge(params)
+			thread.start(loadFile.bind(params))
+		else:
+			queuedParams = params
 
 func loadFile(params:Dictionary):
 	var offs = params["offs"]
@@ -68,8 +65,11 @@ func loadFile(params:Dictionary):
 	var huc = params["huc"]
 	var dark = params["dark"]
 	var legs = params["legs"]
+	var clparams = ["./bin/critters.cfdg","./gen/" + filename]
+	for param in params:
+		clparams.append("/D " + param + "=" + str(params[param]))
 	var output = []
-	var code = OS.execute("./bin/ContextFreeCLI.exe",["./bin/starfish.cfdg","./gen/" + filename, "/D offs=" + str(offs),"/D stroke=" + str(stroke),"/D osc2=" + str(osc2),"/D hu=" + str(hu),"/D huc=" + str(huc),"/D dark=" + str(dark),"/D legs=" + str(legs)],output,true)
+	var code = OS.execute("./bin/ContextFreeCLI.exe",clparams,output,true)
 	#print(code)
 	#print(output)
 	fileReady = true
@@ -80,18 +80,17 @@ func _exit_tree():
 
 
 func _on_body_entered(body: Node) -> void:
-	if !buddy and body is Starfish:
-		var possibleBuddy = body as Starfish
+	if !buddy and body is Critter:
+		var possibleBuddy = body as Critter
 		if !possibleBuddy.buddy:
-			print(possibleBuddy)
 			buddy = possibleBuddy
 			buddy.buddy = self
 			var joint = ConeTwistJoint3D.new()
 			add_child(joint)
 			joint.node_a = self.get_path()
 			joint.node_b = buddy.get_path()
-			joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
-			joint.set_param(ConeTwistJoint3D.PARAM_TWIST_SPAN,0)
-			joint.set_param(ConeTwistJoint3D.PARAM_SOFTNESS,0)
-			joint.set_param(ConeTwistJoint3D.PARAM_BIAS,0)
+			#joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
+			#joint.set_param(ConeTwistJoint3D.PARAM_TWIST_SPAN,0)
+			#joint.set_param(ConeTwistJoint3D.PARAM_SOFTNESS,0)
+			#joint.set_param(ConeTwistJoint3D.PARAM_BIAS,0)
 			
