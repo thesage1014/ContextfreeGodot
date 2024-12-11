@@ -3,6 +3,7 @@ class_name Critter extends RigidBody3D
 @export var modelScene:Node3D
 @export var meshAnim:AnimationPlayer
 @export var meshMesh:MeshInstance3D
+@export var light:OmniLight3D
 var blockGeneration = false
 var generating = false
 var fileReady = false
@@ -47,6 +48,9 @@ func _physics_process(_delta: float) -> void:
 
 func generate(params:Dictionary):
 	if !blockGeneration:
+		print(params)
+		if light and params.has("hu"):
+			light.light_color = Color.from_hsv(params["hu"]/360.0,1,1)
 		generating = true
 		bonusMesh.visible = true
 		if !thread:

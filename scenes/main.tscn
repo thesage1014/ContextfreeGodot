@@ -23,8 +23,9 @@ ssao_horizon = 0.12
 glow_enabled = true
 glow_bloom = 0.71
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.1291
+volumetric_fog_density = 0.1116
 volumetric_fog_albedo = Color(0.48, 1, 0.896, 1)
+volumetric_fog_length = 15.0
 volumetric_fog_sky_affect = 0.195
 
 [sub_resource type="Gradient" id="Gradient_gmiha"]
@@ -68,9 +69,11 @@ environment = SubResource("Environment_72o1c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0.360378, -0.887162, -0.288222, 0.346594, -0.159513, 0.924353, 0, 0, -11.7133)
+light_energy = 0.17
 
 [node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88707, 0)
+visible = false
 light_color = Color(0.888, 1, 0.68, 1)
 light_energy = 4.071
 omni_range = 11.951

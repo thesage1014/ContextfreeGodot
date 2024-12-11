@@ -18,7 +18,7 @@ albedo_texture = ExtResource("4_bxo4p")
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_layxr")
 
-[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh")]
+[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh", "light")]
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_qbdxb")
@@ -26,6 +26,7 @@ bonusMesh = NodePath("BonusMesh")
 modelScene = NodePath("starfish2")
 meshAnim = NodePath("starfish2/AnimationPlayer")
 meshMesh = NodePath("starfish2/Skeleton3D/starfish")
+light = NodePath("OmniLight3D")
 
 [node name="starfish2" parent="." instance=ExtResource("3_vunuf")]
 transform = Transform3D(0.194, 0, 0, 0, -8.48001e-09, -0.194, 0, 0.194, -8.48001e-09, -0.0490272, 0, 0)
@@ -50,6 +51,10 @@ shape = SubResource("SphereShape3D_2gdod")
 [node name="BonusMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0972806)
 mesh = SubResource("QuadMesh_7kbu5")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0, 1, 0.35, 1)
+light_size = 1.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 

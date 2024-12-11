@@ -19,7 +19,7 @@ albedo_texture = ExtResource("4_hxl6m")
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_layxr")
 
-[node name="Octo" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh")]
+[node name="Octo" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh", "light")]
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_0r0ws")
@@ -27,6 +27,7 @@ bonusMesh = NodePath("BonusMesh")
 modelScene = NodePath("octo")
 meshAnim = NodePath("octo/AnimationPlayer")
 meshMesh = NodePath("octo/Armature/Skeleton3D/Cone")
+light = NodePath("OmniLight3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0239514, 0.000425145, 0)
@@ -130,7 +131,7 @@ bones/66/scale = Vector3(1, 1, 1)
 surface_material_override/0 = ExtResource("3_6a7nh")
 
 [node name="Jigglebone" type="Node3D" parent="octo/Armature/Skeleton3D" index="1"]
-transform = Transform3D(0.925521, -1.57274, 0.0228653, -1.11578, -0.675176, -1.27663, 1.10863, 0.633445, -1.30396, -0.112843, 1.02007, -0.00273375)
+transform = Transform3D(0.925521, -1.57274, 0.0228655, -1.11578, -0.675176, -1.27663, 1.10863, 0.633445, -1.30396, -0.112843, 1.02007, -0.00273375)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.014"
@@ -139,7 +140,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone2" type="Node3D" parent="octo/Armature/Skeleton3D" index="2"]
-transform = Transform3D(0.0934698, 1.82234, 0.0310486, 0.642228, -0.00383572, -1.70826, -1.7057, 0.0984169, -0.641489, -0.166499, 0.788537, 0.238165)
+transform = Transform3D(0.0934699, 1.82234, 0.0310484, 0.642228, -0.00383588, -1.70826, -1.7057, 0.0984171, -0.641489, -0.166499, 0.788537, 0.238165)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.018"
@@ -148,7 +149,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone3" type="Node3D" parent="octo/Armature/Skeleton3D" index="3"]
-transform = Transform3D(1.53038, 0.82255, -0.55854, 0.621191, -1.59151, -0.641742, -0.776323, 0.348028, -1.61457, 0.0382818, 0.71954, 0.284949)
+transform = Transform3D(1.53038, 0.82255, -0.558541, 0.621191, -1.59151, -0.641742, -0.776323, 0.348027, -1.61457, 0.0382818, 0.71954, 0.284949)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.010"
@@ -157,7 +158,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone4" type="Node3D" parent="octo/Armature/Skeleton3D" index="4"]
-transform = Transform3D(1.82499, -0.00496537, -2.57864e-05, -0.00139481, -0.503543, -1.75416, 0.00476551, 1.75415, -0.503545, 0.00067769, 1.04924, 0.12629)
+transform = Transform3D(1.82499, -0.00496537, -2.57862e-05, -0.00139481, -0.503543, -1.75416, 0.00476551, 1.75415, -0.503545, 0.00067769, 1.04924, 0.12629)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.006"
@@ -175,7 +176,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone6" type="Node3D" parent="octo/Armature/Skeleton3D" index="6"]
-transform = Transform3D(-0.283131, 1.7711, -0.337149, -0.184579, -0.367964, -1.77796, -1.79343, -0.241735, 0.236213, -0.150239, 1.06032, 0.375864)
+transform = Transform3D(-0.283131, 1.7711, -0.337149, -0.184578, -0.367963, -1.77796, -1.79343, -0.241735, 0.236213, -0.150239, 1.06032, 0.375864)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.025"
@@ -184,7 +185,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone7" type="Node3D" parent="octo/Armature/Skeleton3D" index="7"]
-transform = Transform3D(1.46876, -1.03449, 0.321266, -0.226627, -0.822743, -1.61318, 1.05926, 1.25839, -0.790604, -0.330507, 1.20703, -0.0584172)
+transform = Transform3D(1.46875, -1.03449, 0.321275, -0.226621, -0.822748, -1.61318, 1.05926, 1.25839, -0.790603, -0.330516, 1.20703, -0.0584172)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.033"
@@ -193,7 +194,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone8" type="Node3D" parent="octo/Armature/Skeleton3D" index="8"]
-transform = Transform3D(-1.76672, -0.396911, 0.227556, -0.447216, 1.30669, -1.19298, 0.0965274, -1.21064, -1.36222, -0.0885597, 1.19466, 0.00189073)
+transform = Transform3D(-1.76672, -0.396911, 0.227555, -0.447216, 1.30669, -1.19298, 0.0965274, -1.21064, -1.36222, -0.0885597, 1.19466, 0.00189073)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.030"
@@ -202,7 +203,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone9" type="Node3D" parent="octo/Armature/Skeleton3D" index="9"]
-transform = Transform3D(1.56651, -0.633087, -0.689833, -0.874207, -0.507435, -1.5195, 0.335306, 1.63473, -0.738823, -0.345127, 1.03539, -0.310723)
+transform = Transform3D(1.56651, -0.633082, -0.689834, -0.874205, -0.507429, -1.51951, 0.335305, 1.63473, -0.738815, -0.345127, 1.03539, -0.310733)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.042"
@@ -220,7 +221,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone11" type="Node3D" parent="octo/Armature/Skeleton3D" index="11"]
-transform = Transform3D(0.876217, -1.55539, 0.378988, -1.15765, -0.914022, -1.07473, 1.10577, 0.275594, -1.42547, 0.115974, 0.810942, 0.303603)
+transform = Transform3D(0.876217, -1.55539, 0.378989, -1.15765, -0.914022, -1.07473, 1.10577, 0.275594, -1.42547, 0.115974, 0.810942, 0.303603)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.049"
@@ -229,7 +230,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone12" type="Node3D" parent="octo/Armature/Skeleton3D" index="12"]
-transform = Transform3D(1.24176, 1.33703, 0.0317412, 0.948639, -0.850015, -1.30698, -0.942732, 0.905786, -1.27336, 0.115247, 1.03216, 0.0103525)
+transform = Transform3D(1.24176, 1.33703, 0.031744, 0.94864, -0.850014, -1.30698, -0.94273, 0.905788, -1.27336, 0.115244, 1.03216, 0.0103525)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.054"
@@ -238,7 +239,7 @@ use_gravity = true
 gravity = Vector3(0, 0.2, 0)
 
 [node name="Jigglebone13" type="Node3D" parent="octo/Armature/Skeleton3D" index="13"]
-transform = Transform3D(1.12646, -1.43548, 0.0332609, -0.764368, -0.635281, -1.53062, 1.21551, 0.93082, -0.993345, 0.216035, 0.790076, 0.204247)
+transform = Transform3D(1.12645, -1.43549, 0.0332627, -0.764368, -0.635282, -1.53062, 1.21551, 0.930818, -0.993345, 0.216035, 0.790076, 0.204247)
 top_level = true
 script = ExtResource("4_nbk1k")
 bone_name = "Bone.057"
@@ -249,6 +250,10 @@ gravity = Vector3(0, 0.2, 0)
 [node name="BonusMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0972806)
 mesh = SubResource("QuadMesh_7kbu5")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0, 1, 0.35, 1)
+light_size = 1.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 
