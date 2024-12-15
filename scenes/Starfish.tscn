@@ -18,12 +18,13 @@ albedo_texture = ExtResource("4_bxo4p")
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_layxr")
 
-[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh", "light", "headPos", "originPos")]
+[node name="Starfish" type="RigidBody3D" node_paths=PackedStringArray("bonusMesh", "modelScene", "meshAnim", "meshMesh", "light", "headPos", "originPos", "chatLabel")]
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_qbdxb")
+emojis = "🍌🥞🥯🥓🍳🥣🍩🌈🌈🌈🌈🌈🌈"
 bonusMesh = NodePath("BonusMesh")
 modelScene = NodePath("starfish2")
 meshAnim = NodePath("starfish2/AnimationPlayer")
@@ -31,25 +32,26 @@ meshMesh = NodePath("starfish2/Skeleton3D/starfish")
 light = NodePath("OmniLight3D")
 headPos = NodePath("HeadPos")
 originPos = NodePath("Origin")
+chatLabel = NodePath("ChatLabel")
 
 [node name="starfish2" parent="." instance=ExtResource("3_vunuf")]
-transform = Transform3D(0.194, 0, 0, 0, -8.48001e-09, -0.194, 0, 0.194, -8.48001e-09, -0.0490272, 0, 0)
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, -0.15, 0, 0.15, -6.55671e-09, -0.0490272, 0, 0)
 
 [node name="Skeleton3D" parent="starfish2" index="0"]
-bones/2/rotation = Quaternion(-0.309299, 0.00493127, 0.430151, 0.848104)
-bones/3/rotation = Quaternion(-0.00133102, 0.000199018, 0.000820301, 0.999999)
+bones/2/rotation = Quaternion(-0.41476, 0.00332601, 0.57411, 0.705947)
+bones/3/rotation = Quaternion(-0.016188, 0.000227855, 0.0207272, 0.999654)
 bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(0.308282, -0.00438138, 0.427306, 0.849913)
-bones/5/rotation = Quaternion(0.00103754, -0.000124332, 0.000959794, 0.999999)
+bones/4/rotation = Quaternion(0.415552, -0.00284486, 0.573097, 0.706306)
+bones/5/rotation = Quaternion(0.0164085, -0.000234138, 0.0199045, 0.999667)
 bones/5/scale = Vector3(1, 1, 1)
-bones/6/rotation = Quaternion(-0.0135051, 0.0228215, -0.509532, 0.860043)
-bones/7/rotation = Quaternion(3.2083e-05, -3.07894e-06, -0.00268929, 0.999996)
+bones/6/rotation = Quaternion(-0.018588, 0.0184104, -0.706264, 0.707465)
+bones/7/rotation = Quaternion(0.000121472, 4.05965e-05, -0.0266917, 0.999644)
 bones/7/scale = Vector3(1, 1, 1)
-bones/8/rotation = Quaternion(0.49202, -0.00372643, -0.156131, 0.856461)
-bones/9/rotation = Quaternion(-0.00139017, -1.14002e-07, -0.00428522, 0.99999)
+bones/8/rotation = Quaternion(0.672612, -0.0019094, -0.216927, 0.707483)
+bones/9/rotation = Quaternion(0.020597, -0.000254188, -0.0139908, 0.99969)
 bones/9/scale = Vector3(1, 1, 1)
-bones/10/rotation = Quaternion(-0.499917, 0.0020082, -0.160968, 0.850981)
-bones/11/rotation = Quaternion(-0.00203705, -3.19216e-08, 0.00623722, 0.999978)
+bones/10/rotation = Quaternion(-0.672801, 0.000208389, -0.218482, 0.706827)
+bones/11/rotation = Quaternion(-0.0264818, -0.000299161, 0.000119733, 0.999649)
 
 [node name="starfish" parent="starfish2/Skeleton3D" index="0"]
 surface_material_override/0 = ExtResource("3_36jsh")
@@ -69,6 +71,11 @@ mesh = SubResource("QuadMesh_7kbu5")
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0, 1, 0.35, 1)
 light_size = 1.0
+omni_range = 2.0
+
+[node name="ChatLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0226464, 0.647526, 0)
+billboard = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 

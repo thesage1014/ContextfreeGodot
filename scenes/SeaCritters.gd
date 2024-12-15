@@ -1,4 +1,5 @@
 extends Node3D
+const MAX_CRITTERS = 25
 var meshScenes = [preload("res://scenes/Starfish.tscn"),preload("res://scenes/Octo.tscn")]
 var fishes = []
 var activePreview = 0
@@ -25,7 +26,7 @@ func _ready() -> void:
 	
 
 func _process(delta: float) -> void:
-	previewFish[activePreview].rotate_z(delta*.15)
+	previewFish[activePreview].rotate_y(delta*.15)
 
 func _update_preview():
 	for slider in tabs.get_current_tab_control().find_children("","Slider"):
@@ -38,8 +39,8 @@ func _on_generate_button_pressed() -> void:
 	add_child(newFish)
 	newFish.global_position = Vector3(6,6,0)
 	newFish.apply_central_impulse(Vector3(-6,-6,0))
-	if fishes.size()>35:
-		fishes.pop_front().queue_free()
+	if fishes.size()>=MAX_CRITTERS:
+		fishes.pop_front().despawn()
 	fishes.append(newFish)
 	newFish.generate(params)
 
@@ -68,3 +69,6 @@ func _on_tab_container_tab_changed(tab: int) -> void:
 		previewFish[tab].visible = true
 		activePreview = tab
 		_update_preview()
+	else:
+		for fish in previewFish:
+			fish.visible = false

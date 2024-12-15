@@ -130,7 +130,7 @@ freeze = true
 shape = SubResource("WorldBoundaryShape3D_4qiyp")
 
 [node name="front" type="StaticBody3D" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 1.75956)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 2.7097)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/front"]
 shape = SubResource("WorldBoundaryShape3D_4qiyp")
@@ -142,13 +142,13 @@ transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, 0, -3
 shape = SubResource("WorldBoundaryShape3D_4qiyp")
 
 [node name="left" type="StaticBody3D" parent="WorldEnvironment"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -4, 0, 0)
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -4.91495, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/left"]
 shape = SubResource("WorldBoundaryShape3D_4qiyp")
 
 [node name="right" type="StaticBody3D" parent="WorldEnvironment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4.88067, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/right"]
 shape = SubResource("WorldBoundaryShape3D_4qiyp")
@@ -273,6 +273,7 @@ text = "Stroke
 
 [node name="stroke" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
+min_value = 0.1
 max_value = 10.0
 step = 0.0
 value = 1.0
@@ -323,7 +324,7 @@ step = 0.0
 layout_mode = 2
 text = "Legs"
 
-[node name="nil" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
+[node name="legs" type="HSlider" parent="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer"]
 layout_mode = 2
 min_value = 1.0
 max_value = 12.0
@@ -472,8 +473,8 @@ metadata/_tab_index = 2
 [connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/huc" to="." method="_on_slider_value_changed"]
 [connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_drag_ended"]
 [connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/dark" to="." method="_on_slider_value_changed"]
-[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_drag_ended"]
-[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/nil" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/legs" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="Control/UI/TabContainer/Starfish/MarginContainer/VBoxContainer/legs" to="." method="_on_slider_value_changed"]
 [connection signal="pressed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/HBoxContainer/RandomizeButton" to="." method="_on_randomize_button_pressed"]
 [connection signal="drag_ended" from="Control/UI/TabContainer/Octo/MarginContainer/VBoxContainer/offs" to="." method="_on_slider_drag_ended"]

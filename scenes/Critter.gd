@@ -1,4 +1,5 @@
 class_name Critter extends RigidBody3D
+@export var emojis:String
 @export var bonusMesh:MeshInstance3D
 @export var modelScene:Node3D
 @export var meshAnim:AnimationPlayer
@@ -6,6 +7,7 @@ class_name Critter extends RigidBody3D
 @export var light:OmniLight3D
 @export var headPos:Node3D
 @export var originPos:Node3D
+@export var chatLabel:Label3D
 var blockGeneration = false
 var generating = false
 var fileReady = false
@@ -15,6 +17,10 @@ var queuedParams:Dictionary
 var lastParams:Dictionary
 var buddy:Critter
 var timeGotBuddy = 0
+var minInteractionTime = 4500
+var askingQuestion = false
+var timeQuestionAsked = 0
+var paramInQuestion = ""
 #offs = 15
 #stroke = 1.5
 #osc2 = .03
@@ -23,7 +29,6 @@ var timeGotBuddy = 0
 #dark = 0
 func _ready() -> void:
 	meshAnim.play("Swim")
-
 func _process(delta: float) -> void:
 	if generating:
 		bonusMesh.scale = Vector3(.3,.3,1)
@@ -46,10 +51,32 @@ func _process(delta: float) -> void:
 		thread = null
 		bonusMesh.visible = false
 		
-	
+	if buddy:
+		if !askingQuestion and !buddy.askingQuestion:
+			askingQuestion = true
+			paramInQuestion = lastParams.keys().slice(0,lastParams.size()-2).pick_random()
+			buddy.paramInQuestion = paramInQuestion
+			timeQuestionAsked = Time.get_ticks_msec()
+			chatLabel.text = emojis[lastParams.keys().find(paramInQuestion)]
+			chatLabel.modulate = Color(0,0,0,0)
+			chatLabel.outline_modulate = Color(0,0,0,0)
+			buddy.chatLabel.modulate = Color(0,0,0,0)
+			buddy.chatLabel.outline_modulate = Color(0,0,0,0)
+			buddy.chatLabel.text = emojis[lastParams.keys().find(paramInQuestion)]
+			
+	if askingQuestion:
+		var questionAge = Time.get_ticks_msec()-timeQuestionAsked
+		var fade = smoothstep(0,1000,questionAge-1000)
+		chatLabel.modulate = Color(Color.WHITE,fade)
+		chatLabel.outline_modulate =  Color(Color.BLACK,fade)
+		if fade == 1 and !buddy.askingQuestion:
+			buddy.askingQuestion = true
+			buddy.timeQuestionAsked = Time.get_ticks_msec()-500
+		if questionAge >= 3000:
+			pass
 
 func _physics_process(_delta: float) -> void:
-	apply_central_force(Vector3(randf()-.5,randf()-.5,randf()-.5))
+	apply_central_force(Vector3(randf()-.5,randf()-.5,randf()-.5)*3)
 	if buddy:
 		apply_central_force((buddy.headPos.global_position-headPos.global_position)*2)#,headPos.global_position)
 		originPos.look_at(buddy.position)
@@ -87,17 +114,15 @@ func loadFile(params:Dictionary):
 		clparams.append("/D " + param + "=" + str(params[param]))
 	var output = []
 	var code = OS.execute("./bin/ContextFreeCLI.exe",clparams,output,true)
-	#print(code)
-	#print(output)
 	fileReady = true
 
-func _exit_tree():
-	if thread:
-		thread.wait_to_finish()
+
+
+
 
 
 func _on_body_entered(body: Node) -> void:
-	if !buddy and body is Critter:
+	if !is_queued_for_deletion() and !buddy and body is Critter:
 		var possibleBuddy = body as Critter
 		if !possibleBuddy.buddy:
 			buddy = possibleBuddy
@@ -108,8 +133,12 @@ func _on_body_entered(body: Node) -> void:
 			#add_child(joint)
 			#joint.node_a = self.get_path()
 			#joint.node_b = buddy.get_path()
+			#meshAnim.stop()
+			meshAnim.clear_queue()
 			meshAnim.play("Buddy")
 			meshAnim.queue("Swim")
+			#buddy.meshAnim.stop()
+			buddy.meshAnim.clear_queue()
 			buddy.meshAnim.play("Buddy")
 			buddy.meshAnim.queue("Swim")
 			#joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
@@ -117,11 +146,31 @@ func _on_body_entered(body: Node) -> void:
 			#joint.set_param(ConeTwistJoint3D.PARAM_SOFTNESS,0)
 			#joint.set_param(ConeTwistJoint3D.PARAM_BIAS,0)
 			
-func breakAwayFromBuddy():
-	if Time.get_ticks_msec()-timeGotBuddy > 3000:
-		print(Time.get_ticks_msec()-timeGotBuddy)
-		apply_central_impulse((global_position-headPos.global_position)*5)
-		buddy.apply_central_impulse((global_position-headPos.global_position)*-5)
-		
-		buddy.buddy = null
-		buddy = null
+func breakAwayFromBuddy(override=false):
+	if buddy:
+		if override or Time.get_ticks_msec()-timeGotBuddy > minInteractionTime:
+			var pushForce = 2
+			if askingQuestion and buddy.askingQuestion:
+				var p1 = lastParams[paramInQuestion]
+				var p2 = buddy.lastParams[paramInQuestion]
+				var pmin = Singleton.paramRanges[paramInQuestion][0]
+				var pmax = Singleton.paramRanges[paramInQuestion][1]
+				var dist = smoothstep(pmin,pmax,abs(p1-p2))
+				print(dist)
+				pushForce = 10*dist
+			apply_central_impulse((global_position-headPos.global_position)*pushForce)
+			buddy.apply_central_impulse((global_position-headPos.global_position)*-pushForce)
+			askingQuestion = false
+			chatLabel.text = ""
+			buddy.askingQuestion = false
+			buddy.chatLabel.text = ""
+			buddy.buddy = null
+			buddy = null
+
+func despawn():
+	breakAwayFromBuddy(true)
+	queue_free()
+
+func _exit_tree():
+	if thread:
+		thread.wait_to_finish()
