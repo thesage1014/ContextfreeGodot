@@ -1,0 +1,6 @@
+[gd_resource type="PanoramaSkyMaterial" load_steps=2 format=3 uid="uid://dewesa63msrrr"]
+
+[ext_resource type="Texture2D" uid="uid://bo7ltlnteakfj" path="res://graphics/reef.jpg" id="1_wmt4u"]
+
+[resource]
+panorama = ExtResource("1_wmt4u")

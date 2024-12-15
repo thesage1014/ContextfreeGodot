@@ -1,15 +1,15 @@
 //CF::Size = [s 10]
 CF::Impure = 1
 startshape start
-offs = 35
-stroke = 1.5
-osc2 = .03
+offs = 25
+stroke = 2.5
+osc2 = .00
 hu = 90
-huc = .15
-dark = 0
+huc = .05
+dark = 1
 legs = 5
-tab =1 
-randness =1
+tab = 1
+randness = 0
 CF::Background = [sat .7 b -.2 h hu a -.6]
 shape start {
     if (tab == 0) {
@@ -17,7 +17,8 @@ shape start {
     }
     if (tab == 1) {
         
-        spiro(7200,(legs/2))[s .04 x 1.2 y 1.6 z 100 h hu ]
+        spiro(3600,(legs/2))[s .045 x 1.3 y 1.6 z 100 h hu ]
+        //spiro(3600,(legs/2))[s .25 x 1.2 y 0 z 100 h hu ]
         octopus[s .5 y 1.5 r 20 h hu sat (.5-dark) b (.7-dark)]
     }
 }
@@ -88,7 +89,7 @@ shape underleg(number age, number curl){
         if(randness){
             c2 = rand(curl, -curl/2)
         }
-        underleg(age+1,curl + rand(-.3,.28))[y -.1 s .99 r c2 h (huc*2)]
+        underleg(age+1,curl + rand(-.3,.28))[y -.1 s .99 r c2 h (huc*10)]
     }
     if(randness && mod(age,14) == 0) {
         sucker[s .5 x .8]

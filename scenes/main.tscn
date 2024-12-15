@@ -1,15 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://b7l8ewyqs7eb0"]
+[gd_scene load_steps=20 format=3 uid="uid://b7l8ewyqs7eb0"]
 
 [ext_resource type="Script" path="res://scenes/SeaCritters.gd" id="1_4ykxu"]
 [ext_resource type="PackedScene" uid="uid://oodcnjvspaj1" path="res://scenes/Starfish.tscn" id="1_vd2di"]
-[ext_resource type="Texture2D" uid="uid://bo7ltlnteakfj" path="res://graphics/reef.jpg" id="2_e64l6"]
+[ext_resource type="Material" uid="uid://dewesa63msrrr" path="res://graphics/graphicSky.tres" id="2_8tnta"]
 [ext_resource type="PackedScene" uid="uid://dwqio37dmwpcc" path="res://scenes/Octo.tscn" id="4_e40gs"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_cej5t"]
-panorama = ExtResource("2_e64l6")
+[ext_resource type="Texture2D" uid="uid://dvt3huqdaavgh" path="res://graphics/bubble.png" id="5_gjjh7"]
 
 [sub_resource type="Sky" id="Sky_4hssc"]
-sky_material = SubResource("PanoramaSkyMaterial_cej5t")
+sky_material = ExtResource("2_8tnta")
 
 [sub_resource type="Environment" id="Environment_72o1c"]
 background_mode = 2
@@ -58,6 +56,36 @@ size = Vector3(10, 10, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3snnt"]
 size = Vector3(10, 10, 10)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pfejn"]
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 1.0
+gravity = Vector3(1, 0, 0)
+scale_min = 0.1
+scale_max = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pyjce"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("5_gjjh7")
+emission_enabled = true
+emission = Color(0.75, 0.9, 1, 1)
+backlight = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_jhjx7"]
+material = SubResource("StandardMaterial3D_pyjce")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5lxej"]
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 1.0
+gravity = Vector3(-1, 0, 0)
+scale_min = 0.1
+scale_max = 0.2
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "tabs")]
 script = ExtResource("1_4ykxu")
@@ -131,7 +159,7 @@ priority = 3
 gravity_space_override = 1
 gravity_point_center = Vector3(1, 0, 0)
 gravity_direction = Vector3(1, 0, 0)
-gravity = 0.5
+gravity = 0.25
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push front"]
 shape = SubResource("BoxShape3D_j15dd")
@@ -142,7 +170,7 @@ priority = 2
 gravity_space_override = 1
 gravity_point_center = Vector3(-1, 0, 0)
 gravity_direction = Vector3(-1, 0, 0)
-gravity = 0.5
+gravity = 0.25
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/push back"]
 shape = SubResource("BoxShape3D_78ai0")
@@ -157,6 +185,18 @@ gravity = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/pull center"]
 shape = SubResource("BoxShape3D_3snnt")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1352, -1.14897, 0)
+lifetime = 10.0
+process_material = SubResource("ParticleProcessMaterial_pfejn")
+draw_pass_1 = SubResource("QuadMesh_jhjx7")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1079, -1.14897, -4.32657)
+lifetime = 10.0
+process_material = SubResource("ParticleProcessMaterial_5lxej")
+draw_pass_1 = SubResource("QuadMesh_jhjx7")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

@@ -4,6 +4,8 @@ class_name Critter extends RigidBody3D
 @export var meshAnim:AnimationPlayer
 @export var meshMesh:MeshInstance3D
 @export var light:OmniLight3D
+@export var headPos:Node3D
+@export var originPos:Node3D
 var blockGeneration = false
 var generating = false
 var fileReady = false
@@ -12,6 +14,7 @@ var thread:Thread
 var queuedParams:Dictionary
 var lastParams:Dictionary
 var buddy:Critter
+var timeGotBuddy = 0
 #offs = 15
 #stroke = 1.5
 #osc2 = .03
@@ -42,13 +45,23 @@ func _process(delta: float) -> void:
 		thread.wait_to_finish()
 		thread = null
 		bonusMesh.visible = false
+		
+	
 
 func _physics_process(_delta: float) -> void:
 	apply_central_force(Vector3(randf()-.5,randf()-.5,randf()-.5))
+	if buddy:
+		apply_central_force((buddy.headPos.global_position-headPos.global_position)*2)#,headPos.global_position)
+		originPos.look_at(buddy.position)
+		apply_torque((originPos.rotation_degrees)*.02)
+		angular_damp = 10
+		if randf()<.002:
+			breakAwayFromBuddy()
+
+		
 
 func generate(params:Dictionary):
 	if !blockGeneration:
-		print(params)
 		if light and params.has("hu"):
 			light.light_color = Color.from_hsv(params["hu"]/360.0,1,1)
 		generating = true
@@ -89,12 +102,26 @@ func _on_body_entered(body: Node) -> void:
 		if !possibleBuddy.buddy:
 			buddy = possibleBuddy
 			buddy.buddy = self
-			var joint = ConeTwistJoint3D.new()
-			add_child(joint)
-			joint.node_a = self.get_path()
-			joint.node_b = buddy.get_path()
+			timeGotBuddy = Time.get_ticks_msec()
+			buddy.timeGotBuddy = Time.get_ticks_msec()
+			#var joint = ConeTwistJoint3D.new()
+			#add_child(joint)
+			#joint.node_a = self.get_path()
+			#joint.node_b = buddy.get_path()
+			meshAnim.play("Buddy")
+			meshAnim.queue("Swim")
+			buddy.meshAnim.play("Buddy")
+			buddy.meshAnim.queue("Swim")
 			#joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
 			#joint.set_param(ConeTwistJoint3D.PARAM_TWIST_SPAN,0)
 			#joint.set_param(ConeTwistJoint3D.PARAM_SOFTNESS,0)
 			#joint.set_param(ConeTwistJoint3D.PARAM_BIAS,0)
 			
+func breakAwayFromBuddy():
+	if Time.get_ticks_msec()-timeGotBuddy > 3000:
+		print(Time.get_ticks_msec()-timeGotBuddy)
+		apply_central_impulse((global_position-headPos.global_position)*5)
+		buddy.apply_central_impulse((global_position-headPos.global_position)*-5)
+		
+		buddy.buddy = null
+		buddy = null
