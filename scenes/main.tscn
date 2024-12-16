@@ -1,18 +1,20 @@
-[gd_scene load_steps=20 format=3 uid="uid://b7l8ewyqs7eb0"]
+[gd_scene load_steps=30 format=3 uid="uid://b7l8ewyqs7eb0"]
 
 [ext_resource type="Script" path="res://scenes/SeaCritters.gd" id="1_4ykxu"]
 [ext_resource type="PackedScene" uid="uid://oodcnjvspaj1" path="res://scenes/Starfish.tscn" id="1_vd2di"]
-[ext_resource type="Material" uid="uid://dewesa63msrrr" path="res://graphics/graphicSky.tres" id="2_8tnta"]
 [ext_resource type="PackedScene" uid="uid://dwqio37dmwpcc" path="res://scenes/Octo.tscn" id="4_e40gs"]
 [ext_resource type="Texture2D" uid="uid://dvt3huqdaavgh" path="res://graphics/bubble.png" id="5_gjjh7"]
+[ext_resource type="Shader" uid="uid://bsy2o3luoejos" path="res://graphics/TerrainShader.tres" id="5_sf1xd"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_1lw3g"]
+ground_color = Color(0.034, 0.0736, 0.1, 1)
 
 [sub_resource type="Sky" id="Sky_4hssc"]
-sky_material = ExtResource("2_8tnta")
+sky_material = SubResource("PhysicalSkyMaterial_1lw3g")
 
 [sub_resource type="Environment" id="Environment_72o1c"]
 background_mode = 2
 sky = SubResource("Sky_4hssc")
-sky_rotation = Vector3(0, 3.14159, 0)
 tonemap_mode = 2
 ssao_enabled = true
 ssao_intensity = 16.0
@@ -21,10 +23,9 @@ ssao_horizon = 0.12
 glow_enabled = true
 glow_bloom = 0.71
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.1116
+volumetric_fog_density = 0.0791
 volumetric_fog_albedo = Color(0.48, 1, 0.896, 1)
-volumetric_fog_length = 15.0
-volumetric_fog_sky_affect = 0.195
+volumetric_fog_length = 30.0
 
 [sub_resource type="Gradient" id="Gradient_gmiha"]
 offsets = PackedFloat32Array(0, 0.674603, 1)
@@ -87,17 +88,60 @@ gravity = Vector3(-1, 0, 0)
 scale_min = 0.1
 scale_max = 0.2
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "tabs")]
+[sub_resource type="Gradient" id="Gradient_0b45a"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5rc64"]
+frequency = 0.0035
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m4qar"]
+in_3d_space = true
+color_ramp = SubResource("Gradient_0b45a")
+noise = SubResource("FastNoiseLite_5rc64")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0l6ht"]
+in_3d_space = true
+color_ramp = SubResource("Gradient_0b45a")
+noise = SubResource("FastNoiseLite_5rc64")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ouhq"]
+albedo_color = Color(0.1504, 0.47, 0.368793, 1)
+albedo_texture = SubResource("NoiseTexture2D_m4qar")
+heightmap_enabled = true
+heightmap_scale = 16.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = SubResource("NoiseTexture2D_0l6ht")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_86606"]
+material = SubResource("StandardMaterial3D_2ouhq")
+size = Vector2(32, 32)
+subdivide_width = 256
+subdivide_depth = 256
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_whkea"]
+render_priority = 0
+shader = ExtResource("5_sf1xd")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_05ec1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lcup"]
+render_priority = 0
+shader = ExtResource("5_sf1xd")
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("previewFish", "tabs", "gravityWell")]
 script = ExtResource("1_4ykxu")
 previewFish = [NodePath("WorldEnvironment/Camera3D/PreviewStarfish"), NodePath("WorldEnvironment/Camera3D/Octo")]
 tabs = NodePath("Control/UI/TabContainer")
+gravityWell = NodePath("WorldEnvironment/pull center")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_72o1c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0.360378, -0.887162, -0.288222, 0.346594, -0.159513, 0.924353, 0, 0, -11.7133)
-light_energy = 0.17
+transform = Transform3D(0.893317, -0.250986, 0.372816, 0, 0.829535, 0.558455, -0.449428, -0.498877, 0.741037, 0, 0, -11.7133)
+light_indirect_energy = 0.205
+light_volumetric_fog_energy = 0.215
 
 [node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.88707, 0)
@@ -181,7 +225,7 @@ gravity_space_override = 1
 gravity_point = true
 gravity_point_center = Vector3(0, 1, 0)
 gravity_direction = Vector3(0, 1, 0)
-gravity = 0.2
+gravity = 0.05
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/pull center"]
 shape = SubResource("BoxShape3D_3snnt")
@@ -197,6 +241,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1079, -1.14897, -4.32657)
 lifetime = 10.0
 process_material = SubResource("ParticleProcessMaterial_5lxej")
 draw_pass_1 = SubResource("QuadMesh_jhjx7")
+
+[node name="Terrain" type="MeshInstance3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.53674e-07, -1.3326, -4.70411)
+mesh = SubResource("PlaneMesh_86606")
+surface_material_override/0 = SubResource("ShaderMaterial_whkea")
+
+[node name="Terrain2" type="MeshInstance3D" parent="WorldEnvironment"]
+transform = Transform3D(1.71965, 4.7247, -1.11466, -4.83942, 1.7614, 0, 0.381238, 1.04744, 5.02792, 6.105, 0.226, -5.088)
+visible = false
+mesh = SubResource("CapsuleMesh_05ec1")
+surface_material_override/0 = SubResource("ShaderMaterial_0lcup")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

@@ -5,12 +5,7 @@ var fishes = []
 var activePreview = 0
 @export var previewFish:Array[Critter]
 @export var tabs:TabContainer
-#offs = 15
-#stroke = 1.5
-#osc2 = .03
-#hu = 90
-#huc = .05
-#dark = 0
+@export var gravityWell:Area3D
 var params:Dictionary = {
 	"offs":15,
 	"stroke":1.5,
@@ -23,9 +18,11 @@ var params:Dictionary = {
 func _ready() -> void:
 	_update_preview()
 	previewFish[activePreview].meshAnim.play("Wave2")
-	
+	randomize_params()
 
 func _process(delta: float) -> void:
+	PhysicalSkyMaterial
+	gravityWell.gravity = sin(Time.get_ticks_msec()*.0001)*.15+.05
 	previewFish[activePreview].rotate_y(delta*.15)
 
 func _update_preview():
@@ -49,6 +46,9 @@ func _on_slider_drag_ended(value_changed: bool) -> void:
 
 
 func _on_randomize_button_pressed() -> void:
+	randomize_params()
+
+func randomize_params():
 	previewFish[activePreview].blockGeneration = true
 	for slider in tabs.get_current_tab_control().find_children("","Slider"):
 		if slider.exp_edit:
@@ -57,7 +57,6 @@ func _on_randomize_button_pressed() -> void:
 			slider.value = randf_range(slider.min_value, slider.max_value)
 	previewFish[activePreview].blockGeneration = false
 	_update_preview()
-
 
 func _on_slider_value_changed(value: float) -> void:
 	_update_preview()

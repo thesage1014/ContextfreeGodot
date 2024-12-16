@@ -38,20 +38,15 @@ chatLabel = NodePath("ChatLabel")
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, -0.15, 0, 0.15, -6.55671e-09, -0.0490272, 0, 0)
 
 [node name="Skeleton3D" parent="starfish2" index="0"]
-bones/2/rotation = Quaternion(-0.41476, 0.00332601, 0.57411, 0.705947)
-bones/3/rotation = Quaternion(-0.016188, 0.000227855, 0.0207272, 0.999654)
+bones/3/rotation = Quaternion(-0.00652242, 2.23616e-08, -0.00475962, 0.999967)
 bones/3/scale = Vector3(1, 1, 1)
-bones/4/rotation = Quaternion(0.415552, -0.00284486, 0.573097, 0.706306)
-bones/5/rotation = Quaternion(0.0164085, -0.000234138, 0.0199045, 0.999667)
+bones/5/rotation = Quaternion(0.00389965, 4.09787e-08, -0.00285023, 0.999988)
 bones/5/scale = Vector3(1, 1, 1)
-bones/6/rotation = Quaternion(-0.018588, 0.0184104, -0.706264, 0.707465)
-bones/7/rotation = Quaternion(0.000121472, 4.05965e-05, -0.0266917, 0.999644)
-bones/7/scale = Vector3(1, 1, 1)
-bones/8/rotation = Quaternion(0.672612, -0.0019094, -0.216927, 0.707483)
-bones/9/rotation = Quaternion(0.020597, -0.000254188, -0.0139908, 0.99969)
-bones/9/scale = Vector3(1, 1, 1)
-bones/10/rotation = Quaternion(-0.672801, 0.000208389, -0.218482, 0.706827)
-bones/11/rotation = Quaternion(-0.0264818, -0.000299161, 0.000119733, 0.999649)
+bones/6/rotation = Quaternion(2.26189e-07, 5.76012e-08, -0.707107, 0.707107)
+bones/9/rotation = Quaternion(-0.00139019, -1.15483e-07, -0.0042852, 0.99999)
+bones/10/rotation = Quaternion(-0.672406, 0.000774828, -0.218793, 0.707106)
+bones/11/rotation = Quaternion(-0.00203706, -2.28234e-08, 0.00623721, 0.999978)
+bones/11/scale = Vector3(1, 1, 1)
 
 [node name="starfish" parent="starfish2/Skeleton3D" index="0"]
 surface_material_override/0 = ExtResource("3_36jsh")
@@ -66,6 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.309341)
 
 [node name="BonusMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0972806)
+visible = false
 mesh = SubResource("QuadMesh_7kbu5")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]

@@ -133,13 +133,13 @@ func _on_body_entered(body: Node) -> void:
 			#add_child(joint)
 			#joint.node_a = self.get_path()
 			#joint.node_b = buddy.get_path()
-			#meshAnim.stop()
 			meshAnim.clear_queue()
-			meshAnim.play("Buddy")
+			meshAnim.stop(true)
+			meshAnim.play("Shake")
 			meshAnim.queue("Swim")
-			#buddy.meshAnim.stop()
 			buddy.meshAnim.clear_queue()
-			buddy.meshAnim.play("Buddy")
+			buddy.meshAnim.stop(true)
+			buddy.meshAnim.play("Shake")
 			buddy.meshAnim.queue("Swim")
 			#joint.set_param(ConeTwistJoint3D.PARAM_SWING_SPAN,0)
 			#joint.set_param(ConeTwistJoint3D.PARAM_TWIST_SPAN,0)
@@ -156,7 +156,7 @@ func breakAwayFromBuddy(override=false):
 				var pmin = Singleton.paramRanges[paramInQuestion][0]
 				var pmax = Singleton.paramRanges[paramInQuestion][1]
 				var dist = smoothstep(pmin,pmax,abs(p1-p2))
-				print(dist)
+				#print(dist)
 				pushForce = 10*dist
 			apply_central_impulse((global_position-headPos.global_position)*pushForce)
 			buddy.apply_central_impulse((global_position-headPos.global_position)*-pushForce)
